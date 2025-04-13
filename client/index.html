@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <!-- <form action="/login" methoda=a"post">      [server at port 3000 client at port 5500] --> 
+    <!-- <form id="login" action="localhost:3000/login" method="post">   [add http:// at action]    -->
+    <form id="login" action="http://localhost:3000/login" method="post">
+        <input name="username" placeholder="username"/>
+        <input name="password" type="password" placeholder="password"/>
+        <button type="submit">Login</button>
+    </form>
+</body>
+
+ <!-- after submitting form add listener for server response-->
+<script>
+//     document.forms['login'].addEventListener('submit', (event) => {
+//     event.preventDefault();
+//     // TODO do something here to show user that form is being submitted
+//     fetch(event.target.action, {
+//         method: 'POST',
+//         body: new URLSearchParams(new FormData(event.target)) // event.target is the form
+//     }).then((response) => {
+//         if (!response.ok) {
+//           throw new Error(`HTTP error! Status: ${response.status}`);
+//         }
+//         return response.json(); // or response.text() or whatever the server sends
+//     }).then((body) => {
+//         // TODO handle body
+//     }).catch((error) => {
+//         // TODO handle error
+//     });
+// });
+</script>
+</html>
