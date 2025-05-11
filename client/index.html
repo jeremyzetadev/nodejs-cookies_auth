@@ -34,5 +34,77 @@
 //         // TODO handle error
 //     });
 // });
+
+    function send(endpoint,data,method){
+        document.cookie = "firstname=John"; 
+        document.cookie = "lastname=Doe"; 
+        let url = `http:localhost:4000/${endpoint}`;
+        let h = new Headers();
+        if(data){
+            h.append('Content-Type','application/json');
+            // DEPRECATED h.append('Set-Cookie', firstname=John);  
+            // DEPRECATED h.append('Set-Cookie', lastname=Doe);    
+        }
+        let req = new Request(url,{
+            method,
+            headers: h,
+            body: data,
+            // USE THIS FOR SENDING COOKIE TO SERVER -> will get document.cookie alternative to 'Set-Cookie'
+            credentials: 'include';
+            // USE THIS FOR SENDING COOKIE TO SERVER -> will get document.cookie alternative to 'Set-Cookie'
+        });
+        fetch(req)
+            .then((res)=>res.json())
+            .then(success) // resp json will be get here
+        
+            // USE THIS FOR RECEIVING COOKIE FROM SERVER -> will get document.cookie 
+            // setCookieHeaders = response.headers.getSetCookie(); Multiple
+            const setCookieHeader = response.headers['set-cookie'];
+            const cookie = parseCookie(setCookieHeader); // Implement parseCookie function
+            console.log(cookie);
+            document.cookie = cookie.name + "=" + cookie.value;
+            // USE THIS FOR RECEIVING COOKIE FROM SERVER -> will get document.cookie 
+        
+            .then(fail) 
+    }
+
+    function parseCookie(header) {
+          // Implement your parsing logic here
+          const [name, value, ...attributes] = header.split(';').map(part => part.trim());
+          const cookie = { name, value };
+          if (name && value) {
+            cookie.name = name.split('=')[0];
+            cookie.value = name.split('=')[1];
+            return cookie;
+      }
+      return {};
+    }
+
+//   if (setCookieHeaders) {
+//       setCookieHeaders.forEach(header => {
+//         const cookie = parseCookie(header); // Implement parseCookie function
+//         console.log(cookie);
+//       });
+//     } else if (setCookieHeader) {
+//         const cookie = parseCookie(setCookieHeader); // Implement parseCookie function
+//         console.log(cookie);
+//     }
+
+    function success(content){
+        if('error' in content){
+            fail(content.error);
+            return;
+        }
+        let data =content.data;
+        let pre = document.querySelector(`#${currentForm} .response`);
+        pre.textContent = JSON.stringify(data, '\n' ,2);
+    }
+
+    function fail(err){
+        console.warn(err.message);
+        pre.textContent = err.message;
+    }
+
+
 </script>
 </html>
