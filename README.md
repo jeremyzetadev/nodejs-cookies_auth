@@ -2,7 +2,7 @@
 using form to pass data
 ![image](https://github.com/user-attachments/assets/b06109f7-4076-4ddc-b38c-e0306d2fa274)
 if needed to restore cookie using js, implement fetch with event if react use axios
-![image](https://github.com/user-attachments/assets/c53b0a51-36cd-437a-88e8-0c0ec8f42c3f)
+![image](https://github.com/user-attachments/assets/cdaa760c-a391-4613-87e6-f1482691296c)
 
 
 using post-man to check req-res-cookie
