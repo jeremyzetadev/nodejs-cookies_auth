@@ -4,6 +4,7 @@ const app = express();
 import { v4 as uuidv4 } from 'uuid';
 import * as path from 'path';
 import * as bodyParser from 'body-parser';
+import bcrypt from 'bcrypt'
 
 // always checked where origin or optionals outside origins
 app.use(cors())
@@ -14,6 +15,13 @@ app.use(cors())
 app.use(express.urlencoded({extended: true}));
 
 const sessions ={};
+const users = [
+    {
+        name: "testuser",
+        // pasword: "hashedPassword"
+        password: "$2b$10$BahFKTp13qp/uobH.xWW9.3P/lbUMK3CpO656YdvMHz7sFF1x1jIW"
+    }
+];
 
 app.get('/',(req,res)=>{
     res.redirect('/welcome');
@@ -21,21 +29,63 @@ app.get('/',(req,res)=>{
 
 app.get('/welcome', (req,res)=>{
     // __dirname is same as path.resolve()
-    //res.sendFile(path.join(path.resolve(),"../client/welcome.html"));
-    res.sendFile(path.resolve() + "\\client\\welcome.html")
+    res.sendFile(path.join(path.resolve(),"../client/welcome.html"));
+    // res.sendFile(path.resolve() + "\\client\\welcome.html")
 });
 
 app.get('/index', (req,res)=>{
     // __dirname is same as path.resolve()
     //const p = path.resolve(path.__dirname,"/../client/index.html");
-    //const p = path.join(path.resolve(),"/../client/index.html");
+    const p = path.join(path.resolve(),"/../client/index.html");
     //need to find why path.join, __dirname and path.resolve is not working together
     //file is outside the src, use direct path by \\
-    const p = path.resolve() + "\\client\\index.html"
+    // const p = path.resolve() + "\\client\\index.html"
     res.sendFile(p);
 });
 
-app.post('/login', (req,res)=>{
+app.get('/users/welcome', (req,res)=>{
+    // __dirname is same as path.resolve()
+    res.sendFile(path.join(path.resolve(),"../client/index.html"));
+    // res.sendFile(path.resolve() + "\\client\\welcome.html")
+});
+
+// add register to have user/pass data
+app.post('/users/register', async (req,res)=>{
+    //Authentication login can be move to middleware
+    try{
+        const hashedPassword = await bcrypt.hash(req.body.password, 10);
+        const user = {name: req.body.username, password: hashedPassword}
+        users.push(user);
+        // to login TODO:show success registered
+        console.log("Successfully Registered");
+        res.status(201).sendFile(path.join(path.resolve(),"../client/index.html"));
+    } catch {
+        res.status(500).send()
+    }
+});
+
+// implement persisting login(via JWT/etc, no need to send cred everytime?)
+app.post('/users/login', async(req,res) => {
+    //Authentication verify can be move to middleware
+    console.log(users);
+    console.log(req.body.username);
+    const user = users.find(user=>user.name==req.body.username);
+    if(user==null)
+        return res.status(400).send('Cannot find user');
+    try{
+        if(await bcrypt.compare(req.body.password, user.password)){
+            res.send('Successfully Login');
+        }else{
+            res.send('Not allowed');
+        }
+    } catch {
+        res.status(500).send()
+    }
+})
+
+// by using cookies
+app.post('/login', async (req,res)=>{
+
     //[for-json]
     //const {username,password} = req.body; 
     //[for-formsubmit]

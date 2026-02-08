@@ -8,7 +8,25 @@
 <body>
     <!-- <form action="/login" methoda=a"post">      [server at port 3000 client at port 5500] --> 
     <!-- <form id="login" action="localhost:3000/login" method="post">   [add http:// at action]    -->
+    <!-- test for cookies -->
     <form id="login" action="http://localhost:3000/login" method="post">
+        <h2>For cookies test</h2>
+        <input name="username" placeholder="username"/>
+        <input name="password" type="password" placeholder="password"/>
+        <button type="submit">Login</button>
+    </form>
+
+    <!-- test for auth login/registered -->
+    <form id="userlogin" action="http://localhost:3000/users/login" method="post">
+        <h3>For auth login/registered test</h3>
+        <input name="username" placeholder="username"/>
+        <input name="password" type="password" placeholder="password"/>
+        <button type="submit">Login</button>
+    </form>
+
+    <!-- test for auth login/registered -->
+    <form id="userRegister" action="http://localhost:3000/users/register" method="post">
+        <h3>For auth registration</h3>
         <input name="username" placeholder="username"/>
         <input name="password" type="password" placeholder="password"/>
         <button type="submit">Login</button>
